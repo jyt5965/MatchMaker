@@ -13,19 +13,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<!-- 리스트 -->
+	<!-- <select id="list" resultType="ReplyVO"> -->
+	<!-- select * from freereply where bno = -->
+	<!-- #{bno} order by rno desc -->
+	<!-- </select> -->
+
+	<!-- 리스트(페이징) v1 -->
 	<select id="list" resultType="ReplyVO">
 		select * from freereply where bno =
-		#{bno} order by rno desc
+		#{bno} order by rno desc limit #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+
+	<!-- 페이징 카운트 -->
+	<select id="count" resultType="int">
+		select count(bno) from freereply
+		where bno =#{bno}
 	</select>
 
 	<!-- 수정 -->
 	<update id="update">
 		update freereply set replytext = #{replytext}
-		where rno = #{rno}
+		where
+		rno = #{rno}
 	</update>
 
 	<!-- 삭제 -->
 	<delete id="delete">
 		delete from freereply where rno = #{rno}
 	</delete>
+
 </mapper>

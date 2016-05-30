@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.kosta.matchmaker.domain.Criteria;
 import com.kosta.matchmaker.domain.ReplyVO;
 import com.kosta.matchmaker.service.ReplyService;
 
@@ -20,46 +21,61 @@ public class ReplyServiceTest {
 	@Inject
 	private ReplyService service;
 
+	private int bno = 1;
+	private int page = 1;
+	private int perPageNum = 5;
+	private int rno;
+
 	@Test
 	public void testAdd() throws Exception {
 		ReplyVO reply = new ReplyVO();
-		reply.setBno(1);
+		reply.setBno(bno);
 		reply.setReplytext("나랑_미친듯_놀자~!");
 		reply.setReplyer("jyt");
 
 		service.addReply(reply);
 	}
 
-	@Test
-	public void testList2() throws Exception {
+	// 페이징 이전
+	// @Test
+	// public void testList() throws Exception {
+	//
+	// Scanner scanner = new Scanner(System.in);
+	// System.out.println("본글 번호를 입력하세요.");
+	// int bno = scanner.nextInt();
+	// scanner.close();
+	//
+	// List<ReplyVO> list = service.listReply(bno);
+	//
+	// for (ReplyVO reply : list) {
+	// System.out.println(reply.toString());
+	// }
+	// }
 
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("본글 번호를 입력하세요.");
-		int bno = scanner.nextInt();
-		scanner.close();
-
-		List<ReplyVO> list = service.listReply(bno);
-
-		for (ReplyVO reply : list) {
-			System.out.println(reply.toString());
-		}
-	}
-
+	// 페이징 v1
 	@Test
 	public void testList() throws Exception {
 
-		List<ReplyVO> list = service.listReply(1);
+		Criteria cri = new Criteria();
+		cri.setPage(page);
+		cri.setPerPageNum(perPageNum);
+		
+		List<ReplyVO> list = service.listReply(bno, cri);
+		// 댓글 수
+		System.out.println(bno + "의 전체 댓글수 : " + service.count(bno));
 
 		for (ReplyVO reply : list) {
 			System.out.println(reply.toString());
 		}
-
 	}
 
 	@Test
 	public void modify() throws Exception {
+
+		rnoNum();
+
 		ReplyVO reply = new ReplyVO();
-		reply.setRno(1);
+		reply.setRno(rno);
 		reply.setReplytext("서비스도 수정됐다...ㅠㅠ");
 
 		service.modifyReply(reply);
@@ -67,7 +83,18 @@ public class ReplyServiceTest {
 
 	@Test
 	public void delete() throws Exception {
-		service.deleteReply(1);
+
+		rnoNum();
+
+		service.deleteReply(rno);
+	}
+
+	//rno 입력 중복코드
+	public void rnoNum() throws Exception {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("수정 또는 삭제할 댓글 번호를 입력 : ");
+		rno = scan.nextInt();
+		scan.close();
 	}
 
 }

@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import com.kosta.matchmaker.domain.Criteria;
 import com.kosta.matchmaker.domain.ReplyVO;
 import com.kosta.matchmaker.persistence.ReplyDAO;
 
@@ -22,10 +23,18 @@ public class ReplyServiceImpl implements ReplyService {
 
 	}
 
+	// 페이징 이전
+	// @Override
+	// public List<ReplyVO> listReply(Integer bno) throws Exception {
+	// // TODO Auto-generated method stub
+	// return dao.list(bno);
+	// }
+
+	// 페이징 v1
 	@Override
-	public List<ReplyVO> listReply(Integer bno) throws Exception {
-		// TODO Auto-generated method stub
-		return dao.list(bno);
+	public List<ReplyVO> listReply(Integer bno, Criteria cri) throws Exception {
+
+		return dao.list(bno, cri);
 	}
 
 	@Override
@@ -42,6 +51,13 @@ public class ReplyServiceImpl implements ReplyService {
 
 		dao.delete(rno);
 
+	}
+
+	// counter
+	@Override
+	public int count(Integer bno) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.count(bno);
 	}
 
 }
